@@ -1,0 +1,9 @@
+[submodule "streamdeck-tools"]
+	path = streamdeck-tools
+	url = https://github.com/BarRaider/streamdeck-tools.git
+[submodule "streamdeck-javascript-sdk"]
+	path = streamdeck-javascript-sdk
+	url = https://github.com/elgatosf/streamdeck-javascript-sdk.git
+[submodule "EarTrumpet"]
+	path = EarTrumpet
+	url = https://github.com/File-New-Project/EarTrumpet.git

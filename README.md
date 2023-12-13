@@ -1,7 +1,7 @@
 # CeridwenAudioTools
 StreamDeck+ plugin for changing the default audio device of the foreground application under Windows 10 and later.
 
-![](com.ceridwen.audio\previews\instructions.png)
+![](./com.ceridwen.audio/previews/instructions.png)
 
 - Displays audio input/output of foreground application
 - Allows scrolling through available audio input/output devices

@@ -7,18 +7,15 @@ using EarTrumpet.DataModel.WindowsAudio;
 namespace com.ceridwen.audio
 {
     internal class Program {
+
+        #region Private Members
+
         private static bool playMgrLoaded = false;
         private static bool recMgrLoaded = false;
 
-        private static void PlayMgrLoaded()
-        {
-            playMgrLoaded = true;
-        }
-        private static void RecMgrLoaded()
-        {
-            recMgrLoaded = true;
-        }
+        #endregion
 
+        #region Public Methods
 
         static void Main(string[] args)
         {
@@ -39,5 +36,21 @@ namespace com.ceridwen.audio
 
             SDWrapper.Run(args);
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private static void PlayMgrLoaded()
+        {
+            playMgrLoaded = true;
+        }
+        private static void RecMgrLoaded()
+        {
+            recMgrLoaded = true;
+        }
+
+        #endregion
     }
+
 }

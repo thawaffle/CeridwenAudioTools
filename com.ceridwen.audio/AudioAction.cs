@@ -13,9 +13,13 @@ using Newtonsoft.Json.Linq;
 namespace com.ceridwen.audio
 {
 
+
+
     [PluginActionId("com.ceridwen.audio.action")]
     public class AudioAction : EncoderBase
     {
+        #region Private Classes
+        
         private class PluginSettings
         {
             [JsonProperty(PropertyName = "commapps")]
@@ -63,6 +67,8 @@ namespace com.ceridwen.audio
             }
         }
 
+        #endregion
+
         #region Private Members
 
         private PluginSettings Settings { get; }
@@ -71,7 +77,10 @@ namespace com.ceridwen.audio
         private Process lastProc = Process.GetCurrentProcess();
         private ERole lastRole = ERole.eMultimedia;
         private int timeout = 0;
+
         #endregion
+
+        #region Constructors/Destructors
 
         public AudioAction(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
@@ -99,7 +108,11 @@ namespace com.ceridwen.audio
         {
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Destructor called");
         }
- 
+
+        #endregion
+
+        #region Public Methods
+
         public async override void DialRotate(DialRotatePayload payload)
         {
             if (Selected.IsConfigurable || Settings.EditDefault)
@@ -205,6 +218,8 @@ namespace com.ceridwen.audio
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
+
+        #endregion
 
         #region Private Methods
 

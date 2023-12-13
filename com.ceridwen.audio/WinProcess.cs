@@ -7,20 +7,16 @@ namespace com.ceridwen.audio
 {
     public class WinProcessAPI
     {
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool EnumChildWindows(IntPtr hwnd, WindowEnumProc callback, IntPtr lParam);
+        #region Private Members
 
         private delegate bool WindowEnumProc(IntPtr hwnd, IntPtr lparam);
 
         private Process _realProcess;
+
+        #endregion
+
+        #region Public Methods
 
         public WinProcessAPI() { }
 
@@ -50,6 +46,19 @@ namespace com.ceridwen.audio
             return null;
         }
 
+        #endregion
+
+        #region Private Methods
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool EnumChildWindows(IntPtr hwnd, WindowEnumProc callback, IntPtr lParam);
 
         private Process GetRealProcess(Process foregroundProcess)
         {
@@ -58,7 +67,8 @@ namespace com.ceridwen.audio
         }
 
         private bool ChildWindowCallback(IntPtr hwnd, IntPtr lparam)
-        {   GetWindowThreadProcessId(hwnd, out uint processID);
+        {
+            GetWindowThreadProcessId(hwnd, out uint processID);
             var process = Process.GetProcessById(Convert.ToInt32(processID));
             if (process.ProcessName != "ApplicationFrameHost")
             {
@@ -67,7 +77,7 @@ namespace com.ceridwen.audio
             return true;
         }
 
-
+        #endregion
 
     }
 }

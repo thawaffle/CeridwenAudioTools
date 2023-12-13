@@ -6,20 +6,7 @@ namespace com.ceridwen.audio
 {
 	public class SetTriggerDescriptionMessage : IMessage
     {
-        [JsonProperty("event")]
-        public string Event { get { return "setTriggerDescription"; } }
-
-        [JsonProperty("context")]
-        public string Context { get; private set; }
-
-        [JsonProperty("payload")]
-        internal IPayload Payload { get; private set; }
-
-        public SetTriggerDescriptionMessage(string rotate, string push, string touch, string longTouch, string context)
-        {
-            this.Context = context;
-            this.Payload = new PayloadClass(rotate, push, touch, longTouch);
-        }
+        #region Private Classes
 
         private class PayloadClass : IPayload
         {
@@ -40,5 +27,35 @@ namespace com.ceridwen.audio
                 this.LongTouch = longTouch;
             }
         }
+
+        #endregion
+        
+        #region Public Members
+
+        [JsonProperty("event")]
+        public string Event { get { return "setTriggerDescription"; } }
+
+        [JsonProperty("context")]
+        public string Context { get; private set; }
+
+        #endregion
+
+        #region Private Members
+
+        [JsonProperty("payload")]
+        internal IPayload Payload { get; private set; }
+
+        #endregion
+
+        #region Constructors/Destructors
+
+        public SetTriggerDescriptionMessage(string rotate, string push, string touch, string longTouch, string context)
+        {
+            this.Context = context;
+            this.Payload = new PayloadClass(rotate, push, touch, longTouch);
+        }
+
+        #endregion
+
     }
 }

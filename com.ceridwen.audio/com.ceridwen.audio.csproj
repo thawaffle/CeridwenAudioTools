@@ -675,15 +675,17 @@
       <Link>barraider-sdtools\Wrappers\TitleParameters.cs</Link>
     </Compile>
     <Compile Include="AudioAction.cs" />
+    <Compile Include="AudioDeviceNameComparer.cs" />
     <Compile Include="Eartrumpet\Interop\AppSettings.cs" />
     <Compile Include="Eartrumpet\Interop\Diagnosis\ErrorReporter.cs" />
-    <Compile Include="IndexableCollection.cs" />
+    <Compile Include="EncapsulatedDictionary.cs" />
+    <Compile Include="EncapsulatedSortedList.cs" />
+    <Compile Include="EncapsulatedConcurrentDictionary.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedDevice.cs" />
     <Compile Include="SetTriggerDescriptionMessage.cs" />
-    <Compile Include="SortableCollection.cs" />
     <Compile Include="WinProcess.cs" />
   </ItemGroup>
   <ItemGroup>

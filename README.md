@@ -7,7 +7,7 @@ StreamDeck+ plugin for changing the default audio device of the foreground appli
 - Allows scrolling through available audio input/output devices
 - Allows setting new default input/output of foreground application
 
-![](com.ceridwen.audio\previews\settings.png)
+![](./com.ceridwen.audio/previews/settings.png)
 
 ### Known Issues
 - Application is only configurable if it has opened an audio device (e.g. has played a sound. This is a “feature” of Windows.

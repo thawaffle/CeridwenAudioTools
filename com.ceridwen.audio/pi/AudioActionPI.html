@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>com.ceridwen.audio Settings</title>
+    <link rel="stylesheet" href="../css/sdpi.css">
+    <script src="../js/sdtools.common.js"></script>
+
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <div class="sdpi-item" id="dvDirection">
+            <div class="sdpi-item-label">Audio Direction</div>
+            <select class="sdpi-item-value select sdProperty" id="direction" oninput="setSettings()">
+                <option value="0">Audio Out</option>
+                <option value="1">Audio In</option>
+            </select>
+            <input class="sdpi-item-value sdProperty sdCheckbox" id="lock" type="checkbox" value="" oninput="setSettings()">
+            <label for="lock"><span></span>Lock</label>
+        </div>
+
+        <div type="checkbox" class="sdpi-item">
+            <div class="sdpi-item-label">Options</div>
+            <input class="sdpi-item-value sdProperty sdCheckbox" id="editdef" type="checkbox" value="" oninput="setSettings()">
+            <label for="editdef"><span></span>Allow Changing System Input/Output</label>
+        </div>
+
+        <div type="group" class="sdpi-item" id="colours">
+            <div class="sdpi-item-label">Feedback Colours</div>
+            <div class="sdpi-item-group" id="colours_items" align="right">
+                <span class="sdpi-item-label">Edit</span><input type="color" class="sdpi-item-value sdProperty" id="editcolour" oninput="setSettings()">
+                <span class="sdpi-item-label">Ok</span><input type="color" class="sdpi-item-value sdProperty" id="okcolour" oninput="setSettings()">
+                <span class="sdpi-item-label">Error</span><input type="color" class="sdpi-item-value sdProperty" id="errorcolour" oninput="setSettings()">
+            </div>
+        </div>
+
+        <details>
+            <summary>Advanced...</summary>
+            <div type="textarea" class="sdpi-item" id="dvAdanced">
+                <div class="sdpi-item-label">Map Apps to System Communication Device</div>
+                <div type="textarea" id="dvApps" width="100%">
+                    <span class="sdpi-item-value textarea" width="100%">
+                        <textarea width="100%" type="textarea" onblur="setSettings()" class="sdProperty" id="commapps" placeholder="processname" rows="5"></textarea>
+                    </span>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Acknowledgements...</summary>
+            <p>
+                <ul>
+                    <li><a onclick="openWebsite('https://github.com/BarRaider/streamdeck-tools')">BarRaider's Stream Deck Tools</a></li>
+                    <li><a onclick="openWebsite('https://github.com/File-New-Project/EarTrumpet')">EarTrumpet</a></li>
+                </ul>
+            </p>
+        </details>
+    </div>
+</body>
+</html>

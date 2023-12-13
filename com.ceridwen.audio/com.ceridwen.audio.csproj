@@ -1,0 +1,804 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4635D874-69C0-4010-BE46-77EF92EB1553}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>com.ceridwen.audio</RootNamespace>
+    <AssemblyName>com.ceridwen.audio</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\com.ceridwen.audio.sdPlugin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;X86</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\com.ceridwen.audio.sdPlugin\</OutputPath>
+    <DefineConstants>X86</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>audio.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Startup|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\com.ceridwen.audio.sdPlugin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;X86  DEBUG_STARTUP</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommandLine, Version=2.9.1.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.9.1\lib\net461\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.5.2.7\lib\net46\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.8.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\EarTrumpet\EarTrumpet\BindableBase.cs">
+      <Link>Eartrumpet\BindableBase.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\AppInformationFactory.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\AppInformationFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\IAppInfo.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\IAppInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\Internal\DesktopAppInfo.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\Internal\DesktopAppInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\Internal\ModernAppInfo.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\Internal\ModernAppInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\Internal\SystemSoundsAppInfo.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\Internal\SystemSoundsAppInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\AppInformation\Internal\ZombieProcessException.cs">
+      <Link>Eartrumpet\DataModel\AppInformation\Internal\ZombieProcessException.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\Audio\IAudioDevice.cs">
+      <Link>Eartrumpet\DataModel\Audio\IAudioDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\Audio\IAudioDeviceManager.cs">
+      <Link>Eartrumpet\DataModel\Audio\IAudioDeviceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\Audio\IAudioDeviceSession.cs">
+      <Link>Eartrumpet\DataModel\Audio\IAudioDeviceSession.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\Audio\IStreamWithVolumeControl.cs">
+      <Link>Eartrumpet\DataModel\Audio\IStreamWithVolumeControl.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\Audio\SessionState.cs">
+      <Link>Eartrumpet\DataModel\Audio\SessionState.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\FilteredCollectionChain.cs">
+      <Link>Eartrumpet\DataModel\FilteredCollectionChain.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\ProcessWatcherService.cs">
+      <Link>Eartrumpet\DataModel\ProcessWatcherService.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\AudioDeviceKind.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\AudioDeviceKind.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\IAudioDeviceChannel.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\IAudioDeviceChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\IAudioDeviceManagerWindowsAudio.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\IAudioDeviceManagerWindowsAudio.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\IAudioDeviceSessionChannel.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\IAudioDeviceSessionChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\IAudioDeviceWindowsAudio.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\IAudioDeviceWindowsAudio.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDevice.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceChannel.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceChannelCollection.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceChannelCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceManager.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSession.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSession.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannel.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannelCollection.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannelCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannelMultiplexer.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionChannelMultiplexer.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionCollection.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionGroup.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioDeviceSessionGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\AudioPolicyConfigService.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\AudioPolicyConfigService.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\Helpers.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\Helpers.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\IAudioDeviceInternal.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\IAudioDeviceInternal.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\Internal\IAudioDeviceSessionInternal.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\Internal\IAudioDeviceSessionInternal.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\DataModel\WindowsAudio\WindowsAudioFactory.cs">
+      <Link>Eartrumpet\DataModel\WindowsAudio\WindowsAudioFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Extensions\ExceptionExtensions.cs">
+      <Link>Eartrumpet\Extensions\ExceptionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Extensions\FloatExtensions.cs">
+      <Link>Eartrumpet\Extensions\FloatExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Extensions\IEnumerableExtensions.cs">
+      <Link>Eartrumpet\Extensions\IEnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Extensions\IPropertyStoreExtensions.cs">
+      <Link>Eartrumpet\Extensions\IPropertyStoreExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Extensions\OperatingSystemExtensions.cs">
+      <Link>Eartrumpet\Extensions\OperatingSystemExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\AppBarData.cs">
+      <Link>Eartrumpet\Interop\AppBarData.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\AppBarEdge.cs">
+      <Link>Eartrumpet\Interop\AppBarEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\AppBarMessage.cs">
+      <Link>Eartrumpet\Interop\AppBarMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\ApplicationResolver.cs">
+      <Link>Eartrumpet\Interop\ApplicationResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\CLSCTX.cs">
+      <Link>Eartrumpet\Interop\CLSCTX.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Combase.cs">
+      <Link>Eartrumpet\Interop\Combase.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\FolderIds.cs">
+      <Link>Eartrumpet\Interop\FolderIds.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\GPS.cs">
+      <Link>Eartrumpet\Interop\GPS.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Helpers\AudioPolicyConfigFactory.cs">
+      <Link>Eartrumpet\Interop\Helpers\AudioPolicyConfigFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Helpers\AudioPolicyConfigFactoryImplFor21H2.cs">
+      <Link>Eartrumpet\Interop\Helpers\AudioPolicyConfigFactoryImplFor21H2.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Helpers\AudioPolicyConfigFactoryImplForDownlevel.cs">
+      <Link>Eartrumpet\Interop\Helpers\AudioPolicyConfigFactoryImplForDownlevel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Helpers\Kernel32Helper.cs">
+      <Link>Eartrumpet\Interop\Helpers\Kernel32Helper.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\HRESULT.cs">
+      <Link>Eartrumpet\Interop\HRESULT.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\IPropertyStore.cs">
+      <Link>Eartrumpet\Interop\IPropertyStore.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\IShellItem.cs">
+      <Link>Eartrumpet\Interop\IShellItem.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\IShellItem2.cs">
+      <Link>Eartrumpet\Interop\IShellItem2.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Kernel32.cs">
+      <Link>Eartrumpet\Interop\Kernel32.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\AudioSessionDisconnectReason.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\AudioSessionDisconnectReason.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\AudioSessionState.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\AudioSessionState.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\AUDIO_VOLUME_NOTIFICATION_DATA.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\AUDIO_VOLUME_NOTIFICATION_DATA.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\DeviceState.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\DeviceState.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\EDataFlow.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\EDataFlow.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\ERole.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\ERole.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioEndpointVolume.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioEndpointVolume.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioEndpointVolumeCallback.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioEndpointVolumeCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioMeterInformation.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioMeterInformation.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactory.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactoryVariantFor21H2.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactoryVariantFor21H2.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactoryVariantForDownlevel.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioPolicyConfigFactoryVariantForDownlevel.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionControl.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionControl.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionControl2.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionControl2.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionEnumerator.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionEvents.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionEvents.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionManager2.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionManager2.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioSessionNotification.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioSessionNotification.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IAudioVolumeDuckNotification.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IAudioVolumeDuckNotification.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IChannelAudioVolume.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IChannelAudioVolume.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IMMDevice.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IMMDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IMMDeviceCollection.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IMMDeviceCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IMMDeviceEnumerator.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IMMDeviceEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IMMEndpoint.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IMMEndpoint.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IMMNotificationClient.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IMMNotificationClient.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\IPolicyConfig.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\IPolicyConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\ISimpleAudioVolume.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\ISimpleAudioVolume.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\MMDeviceEnumerator.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\MMDeviceEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\MMDeviceAPI\PolicyConfigClient.cs">
+      <Link>Eartrumpet\Interop\MMDeviceAPI\PolicyConfigClient.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\NotifyIconData.cs">
+      <Link>Eartrumpet\Interop\NotifyIconData.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Ntdll.cs">
+      <Link>Eartrumpet\Interop\Ntdll.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Ole32.cs">
+      <Link>Eartrumpet\Interop\Ole32.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\PropertyKeys.cs">
+      <Link>Eartrumpet\Interop\PropertyKeys.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\PropVariant.cs">
+      <Link>Eartrumpet\Interop\PropVariant.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\RECT.cs">
+      <Link>Eartrumpet\Interop\RECT.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\SafeHandles\HMODULE.cs">
+      <Link>Eartrumpet\Interop\SafeHandles\HMODULE.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\SFGAO.cs">
+      <Link>Eartrumpet\Interop\SFGAO.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\Shell32.cs">
+      <Link>Eartrumpet\Interop\Shell32.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\shlwapi.cs">
+      <Link>Eartrumpet\Interop\shlwapi.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\SICHINT.cs">
+      <Link>Eartrumpet\Interop\SICHINT.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\SIGDN.cs">
+      <Link>Eartrumpet\Interop\SIGDN.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\STGM.cs">
+      <Link>Eartrumpet\Interop\STGM.cs</Link>
+    </Compile>
+    <Compile Include="..\EarTrumpet\EarTrumpet\Interop\User32.cs">
+      <Link>Eartrumpet\Interop\User32.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Attributes\FilenamePropertyAttribute.cs">
+      <Link>barraider-sdtools\Attributes\FilenamePropertyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Attributes\PluginActionIdAttribute.cs">
+      <Link>barraider-sdtools\Attributes\PluginActionIdAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\EncoderBase.cs">
+      <Link>barraider-sdtools\Backend\EncoderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\ICommonPluginFunctions.cs">
+      <Link>barraider-sdtools\Backend\ICommonPluginFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\IEncoderPlugin.cs">
+      <Link>barraider-sdtools\Backend\IEncoderPlugin.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\IKeypadPlugin.cs">
+      <Link>barraider-sdtools\Backend\IKeypadPlugin.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\ISDConnection.cs">
+      <Link>barraider-sdtools\Backend\ISDConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\KeyAndEncoderBase.cs">
+      <Link>barraider-sdtools\Backend\KeyAndEncoderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\KeypadBase.cs">
+      <Link>barraider-sdtools\Backend\KeypadBase.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\PluginBase.cs">
+      <Link>barraider-sdtools\Backend\PluginBase.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\PluginContainer.cs">
+      <Link>barraider-sdtools\Backend\PluginContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\SDConnection.cs">
+      <Link>barraider-sdtools\Backend\SDConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Backend\SDWrapper.cs">
+      <Link>barraider-sdtools\Backend\SDWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\IPayload.cs">
+      <Link>barraider-sdtools\Communication\IPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\EmptyPayload.cs">
+      <Link>barraider-sdtools\Communication\Messages\EmptyPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\GetGlobalSettingsMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\GetGlobalSettingsMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\GetSettingsMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\GetSettingsMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\IMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\IMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\LogMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\LogMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\OpenUrlMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\OpenUrlMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\RegisterEventMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\RegisterEventMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SendToPropertyInspectorMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SendToPropertyInspectorMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetFeedbackLayoutMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetFeedbackLayoutMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetFeedbackMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetFeedbackMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetFeedbackMessageEx.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetFeedbackMessageEx.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetGlobalSettingsMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetGlobalSettingsMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetImageMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetImageMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetSettingsMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetSettingsMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetStateMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetStateMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SetTitleMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SetTitleMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\ShowAlertMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\ShowAlertMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\ShowOkMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\ShowOkMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\Messages\SwitchToProfileMessage.cs">
+      <Link>barraider-sdtools\Communication\Messages\SwitchToProfileMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\ApplicationDidLaunchEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\ApplicationDidLaunchEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\ApplicationDidTerminateEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\ApplicationDidTerminateEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\BaseEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\BaseEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DeviceDidConnectEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DeviceDidConnectEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DeviceDidDisconnectEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DeviceDidDisconnectEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DialDownEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DialDownEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DialRotateEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DialRotateEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DialUpEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DialUpEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DidReceiveGlobalSettingsEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DidReceiveGlobalSettingsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\DidReceiveSettingsEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\DidReceiveSettingsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\KeyDownEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\KeyDownEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\KeyUpEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\KeyUpEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\PropertyInspectorDidAppearEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\PropertyInspectorDidAppearEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\PropertyInspectorDidDisappearEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\PropertyInspectorDidDisappearEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\SendToPluginEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\SendToPluginEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\SystemDidWakeUpEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\SystemDidWakeUpEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\TitleParametersDidChangeEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\TitleParametersDidChangeEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\TouchpadPressEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\TouchpadPressEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\WillAppearEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\WillAppearEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDEvents\WillDisappearEvent.cs">
+      <Link>barraider-sdtools\Communication\SDEvents\WillDisappearEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\SDKTarget.cs">
+      <Link>barraider-sdtools\Communication\SDKTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Communication\StreamDeckConnection.cs">
+      <Link>barraider-sdtools\Communication\StreamDeckConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\ApplicationDidLaunch.cs">
+      <Link>barraider-sdtools\Events\ApplicationDidLaunch.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\ApplicationDidTerminate.cs">
+      <Link>barraider-sdtools\Events\ApplicationDidTerminate.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\DeviceDidConnect.cs">
+      <Link>barraider-sdtools\Events\DeviceDidConnect.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\DeviceDidDisconnect.cs">
+      <Link>barraider-sdtools\Events\DeviceDidDisconnect.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\PropertyInspectorDidAppear.cs">
+      <Link>barraider-sdtools\Events\PropertyInspectorDidAppear.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\PropertyInspectorDidDisappear.cs">
+      <Link>barraider-sdtools\Events\PropertyInspectorDidDisappear.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\SendToPlugin.cs">
+      <Link>barraider-sdtools\Events\SendToPlugin.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\SystemDidWakeUp.cs">
+      <Link>barraider-sdtools\Events\SystemDidWakeUp.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Events\TitleParametersDidChange.cs">
+      <Link>barraider-sdtools\Events\TitleParametersDidChange.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\AppearancePayload.cs">
+      <Link>barraider-sdtools\Payloads\AppearancePayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\ApplicationPayload.cs">
+      <Link>barraider-sdtools\Payloads\ApplicationPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\DialPayload.cs">
+      <Link>barraider-sdtools\Payloads\DialPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\DialRotatePayload.cs">
+      <Link>barraider-sdtools\Payloads\DialRotatePayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\InitialPayload.cs">
+      <Link>barraider-sdtools\Payloads\InitialPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\KeyPayload.cs">
+      <Link>barraider-sdtools\Payloads\KeyPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\ReceivedGlobalSettingsPayload.cs">
+      <Link>barraider-sdtools\Payloads\ReceivedGlobalSettingsPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\ReceivedSettingsPayload.cs">
+      <Link>barraider-sdtools\Payloads\ReceivedSettingsPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\StreamDeckOptions.cs">
+      <Link>barraider-sdtools\Payloads\StreamDeckOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\TitleParametersPayload.cs">
+      <Link>barraider-sdtools\Payloads\TitleParametersPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\TitleParametersRawPayload.cs">
+      <Link>barraider-sdtools\Payloads\TitleParametersRawPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Payloads\TouchpadPressPayload.cs">
+      <Link>barraider-sdtools\Payloads\TouchpadPressPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\DeviceType.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\DeviceType.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\StreamDeckApplicationInfo.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\StreamDeckApplicationInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\StreamDeckDeviceInfo.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\StreamDeckDeviceInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\StreamDeckDeviceSize.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\StreamDeckDeviceSize.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\StreamDeckInfo.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\StreamDeckInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\StreamDeckInfo\StreamDeckPluginInfo.cs">
+      <Link>barraider-sdtools\StreamDeckInfo\StreamDeckPluginInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\ExtensionMethods.cs">
+      <Link>barraider-sdtools\Tools\ExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\GlobalSettingsManager.cs">
+      <Link>barraider-sdtools\Tools\GlobalSettingsManager.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\GraphicsTools.cs">
+      <Link>barraider-sdtools\Tools\GraphicsTools.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\Logger.cs">
+      <Link>barraider-sdtools\Tools\Logger.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\PayloadExtensionMethods.cs">
+      <Link>barraider-sdtools\Tools\PayloadExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\RandomGenerator.cs">
+      <Link>barraider-sdtools\Tools\RandomGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Tools\Tools.cs">
+      <Link>barraider-sdtools\Tools\Tools.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Wrappers\KeyCoordinates.cs">
+      <Link>barraider-sdtools\Wrappers\KeyCoordinates.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Wrappers\PluginActionId.cs">
+      <Link>barraider-sdtools\Wrappers\PluginActionId.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Wrappers\SDEventReceivedEventArgs.cs">
+      <Link>barraider-sdtools\Wrappers\SDEventReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\streamdeck-tools\barraider-sdtools\Wrappers\TitleParameters.cs">
+      <Link>barraider-sdtools\Wrappers\TitleParameters.cs</Link>
+    </Compile>
+    <Compile Include="AudioAction.cs" />
+    <Compile Include="Eartrumpet\Interop\AppSettings.cs" />
+    <Compile Include="Eartrumpet\Interop\Diagnosis\ErrorReporter.cs" />
+    <Compile Include="IndexableCollection.cs" />
+    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectedDevice.cs" />
+    <Compile Include="SetTriggerDescriptionMessage.cs" />
+    <Compile Include="SortableCollection.cs" />
+    <Compile Include="WinProcess.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\streamdeck-tools\barraider-sdtools\barraider-sdtools.csproj">
+      <Link>barraider-sdtools\barraider-sdtools.csproj</Link>
+    </None>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <None Include="layouts\device.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="layouts\loading.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\streamdeck-javascript-sdk\assets\caret.svg">
+      <Link>assets\caret.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\caret_closed.svg">
+      <Link>assets\caret_closed.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\check.png">
+      <Link>assets\check.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\check.svg">
+      <Link>assets\check.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\elg_calendar.svg">
+      <Link>assets\elg_calendar.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\elg_calendar_inv.svg">
+      <Link>assets\elg_calendar_inv.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\rcheck.svg">
+      <Link>assets\rcheck.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\assets\tick.svg">
+      <Link>assets\tick.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-javascript-sdk\css\sdpi.css">
+      <Link>css\sdpi.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\streamdeck-tools\barraider-sdtools\BRLogo_460.png">
+      <Link>barraider-sdtools\BRLogo_460.png</Link>
+    </Content>
+    <Content Include="..\streamdeck-tools\barraider-sdtools\streamdeck-tools.xml">
+      <Link>barraider-sdtools\streamdeck-tools.xml</Link>
+    </Content>
+    <Content Include="audio.ico" />
+    <Content Include="icons\audio%402x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\audio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\audio_mono.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\ceridwen_mono.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\hourglass.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sdtools.common.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\audio.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\in.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icons\out.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pi\AudioActionPI.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="previews\instructions.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="previews\overview.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="previews\settings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

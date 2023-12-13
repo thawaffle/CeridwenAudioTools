@@ -1,0 +1,52 @@
+{
+  "Actions": [
+    {
+      "Icon": "icons/audio_mono",
+      "Name": "Audio Input/Output",
+      "States": [
+        {
+          "Title": "Audio Input/Output",
+          "ShowTitle": false,
+          "Image": "icons/audio",
+          "TitleAlignment": "middle",
+          "FontSize": "12"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Edit Audio Input/Ouput",
+      "UUID": "com.ceridwen.audio.action",
+      "PropertyInspectorPath": "pi/AudioActionPI.html",
+      "Controllers": [ "Encoder" ],
+      "Encoder": {
+        "layout": "layouts/loading.json",
+        "Icon": "icons/audio",
+        "StackColor": "#0000FF",
+        "TriggerDescription": {
+          "Rotate": "Choose Audio Device",
+          "Push": "Select Audio Device",
+          "Touch": "Show Current Audio Device",
+          "LongTouch": "Switch Audio Direction"
+        }
+      }
+    }
+  ],
+  "Author": "M. J. Dovey",
+  "Name": "Ceridwen Audio Tools",
+  "Description": "StreamDeck+ plugin for changing the default audio device of the foreground application under Windows 10 and later.",
+  "Icon": "icons/audio",
+  "URL": "https://www.ceridwen.com/streamdeck-plugins/",
+  "Version": "1.0.5",
+  "CodePath": "com.ceridwen.audio",
+  "Category": "Ceridwen Audio Tools",
+  "CategoryIcon": "icons/ceridwen_mono",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.0"
+  }
+}

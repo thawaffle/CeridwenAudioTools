@@ -1,0 +1,53 @@
+{
+  "id": "com.ceridwen.audio.layout.device",
+  "items": [
+    {
+      "key": "canvas",
+      "type": "pixmap",
+      "opacity": 0.4,
+      "rect": [ 0, 0, 200, 100 ],
+      "zOrder": 0
+    },
+    {
+      "key": "direction",
+      "type": "text",
+      "rect": [ 16, 10, 108, 24 ],
+      "font": {
+        "size": 16,
+        "weight": 600
+      },
+      "alignment": "left",
+      "zOrder": 1
+    },
+    {
+      "key": "indicator",
+      "type": "pixmap",
+      "rect": [ 152, 10, 32, 32 ],
+      "zOrder": 2
+    },
+    {
+      "key": "device",
+      "type": "text",
+      "rect": [ 16, 40, 168, 22 ],
+      "text-overflow": "fade",
+      "font": {
+        "size": 14,
+        "weight": 600
+      },
+      "alignment": "left",
+      "zOrder": 3
+    },
+    {
+      "key": "description",
+      "type": "text",
+      "rect": [ 16, 64, 168, 20 ],
+      "text-overflow": "fade",
+      "font": {
+        "size": 12,
+        "weight": 400
+      },
+      "alignment": "left",
+      "zOrder": 4
+    }
+  ]
+}

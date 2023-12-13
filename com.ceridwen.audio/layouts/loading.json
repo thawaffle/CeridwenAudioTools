@@ -1,0 +1,23 @@
+{
+  "id": "com.ceridwen.audio.layout.loading",
+  "items": [
+    {
+      "key": "icon",
+      "type": "pixmap",
+      "value": "icons/audio",
+      "rect": [ 76, 40, 48, 48 ]
+    },
+    {
+      "key": "direction",
+      "type": "text",
+      "rect": [ 16, 10, 108, 24 ],
+      "font": {
+        "size": 16,
+        "weight": 600
+      },
+      "value": "Loadng...",
+      "alignment": "left",
+      "zOrder": 1
+    }
+  ]
+}

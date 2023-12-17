@@ -686,7 +686,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedDevice.cs" />
     <Compile Include="SetTriggerDescriptionMessage.cs" />
-    <Compile Include="WinProcess.cs" />
+    <Compile Include="WinProcessAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\streamdeck-tools\barraider-sdtools\barraider-sdtools.csproj">

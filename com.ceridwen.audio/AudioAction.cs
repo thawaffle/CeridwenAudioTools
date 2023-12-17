@@ -77,7 +77,7 @@ namespace com.ceridwen.audio
         private Process lastProc = Process.GetCurrentProcess();
         private ERole lastRole = ERole.eMultimedia;
         private int timeout = 0;
-
+        
         #endregion
 
         #region Constructors/Destructors
@@ -91,14 +91,13 @@ namespace com.ceridwen.audio
             else
             {
                 this.Settings = new PluginSettings(this);
-                payload.Settings.Populate(this.Settings);
+                payload?.Settings.Populate(this.Settings);
 
             }
 
             Selected.SelectedDeviceKind = (this.Settings.Direction == 0) ? AudioDeviceKind.Playback : AudioDeviceKind.Recording;
-
-            Selected.SelectAudioDevice();
-            Connection.SetFeedbackLayoutAsync("layouts/device.json");
+            Selected?.SelectAudioDevice();
+            Connection?.SetFeedbackLayoutAsync("layouts/device.json");
             _ = SaveSettings();
             _ = UpdateTriggerDescriptionsAsync();
             _ = UpdateDisplay(true);
@@ -106,7 +105,7 @@ namespace com.ceridwen.audio
 
         public override void Dispose()
         {
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Destructor called");
+            Logger.Instance?.LogMessage(TracingLevel.INFO, $"Destructor called");
         }
 
         #endregion
@@ -137,13 +136,13 @@ namespace com.ceridwen.audio
         {
             if (StopWatch.ElapsedMilliseconds > 1000 && Settings.EditDefault)
             {
-                Selected.SetSystemAudioDevice();
+                Selected?.SetSystemAudioDevice();
                 timeout = -2;
                 await UpdateDisplay();
             }
             else
             {
-                Process proc = WinProcessAPI.GetAPI().GetForegroundWindowProcess();
+                Process proc = WinProcessAPI.GetForegroundWindowProcess();
                 ERole eRole = GetTargetRole(proc); 
                 if (Selected.IsConfigurable) 
                 {
@@ -165,28 +164,36 @@ namespace com.ceridwen.audio
 
         public override async void TouchPress(TouchpadPressPayload payload)
         {
-            if (payload.IsLongPress && !this.Settings.Lock)
-            {
-                if (Selected.SelectedDeviceKind == AudioDeviceKind.Playback)
+            if (payload.IsLongPress) {
+                if (!this.Settings.Lock)
                 {
-                    Selected.SelectedDeviceKind = AudioDeviceKind.Recording;
+                    if (Selected?.SelectedDeviceKind == AudioDeviceKind.Playback)
+                    {
+                        Selected.SelectedDeviceKind = AudioDeviceKind.Recording;
+                    }
+                    else
+                    {
+                        Selected.SelectedDeviceKind = AudioDeviceKind.Playback;
+                    }
+                    await SaveSettings();
+                    await UpdateDisplay();
                 } else
                 {
-                    Selected.SelectedDeviceKind = AudioDeviceKind.Playback;
+                    timeout = -3;
+                    await UpdateDisplay();
+                    return;
                 }
-                await SaveSettings();
-                await UpdateDisplay();
             }
             if (timeout != 0)
                 timeout = 0;
-            Process proc = WinProcessAPI.GetAPI().GetForegroundWindowProcess();
+            Process proc = WinProcessAPI.GetForegroundWindowProcess();
             ERole eRole = GetTargetRole(proc);
             SelectAudioDevice(proc, eRole);
         }
 
         public override async void OnTick() {
-            Process proc = WinProcessAPI.GetAPI().GetForegroundWindowProcess();
-            if (proc.Id != lastProc.Id)
+            Process proc = WinProcessAPI.GetForegroundWindowProcess();
+            if (proc?.Id != lastProc?.Id)
             {
                 ERole eRole = GetTargetRole(proc);
                 SelectAudioDevice(proc, eRole);
@@ -226,24 +233,24 @@ namespace com.ceridwen.audio
         private async Task UpdateDisplay(bool wait = false)
         {
             char[] delim = { '(' };
-            String devDisp = Selected.SelectedDeviceName;
-            String devName = devDisp.Split(delim).First();
-            String devDesc = devDisp.Substring(devName.Length);
+            String devDisp = Selected?.SelectedDeviceName;
+            String devName = devDisp?.Split(delim)?.First();
+            String devDesc = devDisp?.Substring(devName.Length);
             String fb = "{";
-            fb += "\"direction\":\"" + ((Selected.SelectedDeviceKind == AudioDeviceKind.Playback) ? "Audio Out" : "Audio In") + "\",";
-            fb += "\"indicator\": {\"value\": \"icons/" + (wait ? "hourglass" : (Selected.SelectedDeviceKind == AudioDeviceKind.Playback) ? "out" : "in") + "\",";
-            fb += "\"opacity\": " + (Selected.IsConfigurable || wait ? "1.0" : "0.5") + "},";
-            fb += "\"device\":\"" + (wait ? "" : devName) + "\",";
-            fb += "\"description\":\"" + (wait ? "" : devDesc) + "\"";
+            fb += $"\"direction\":\"{((Selected?.SelectedDeviceKind == AudioDeviceKind.Playback) ? "Audio Out" : "Audio In")}\",";
+            fb += $"\"indicator\": {{\"value\": \"icons/{(wait ? "hourglass" : ((Selected?.SelectedDeviceKind == AudioDeviceKind.Playback) ? "out" : "in"))}\",";
+            fb += $"\"opacity\": {(Selected.IsConfigurable || wait ? "1.0" : "0.5")}}},";
+            fb += $"\"device\":\"{(wait ? "" : devName)}\",";
+            fb += $"\"description\":\"{(wait ? "" : devDesc)}\"";
             if (timeout != -1)
-                fb += ",\"canvas\": {\"background\":\"" + ((timeout > 0) ? this.Settings.EditColour : ((timeout == -2) ? this.Settings.OkColour : ((timeout <= -3) ? this.Settings.ErrorColour : ""))) + "\"}";
+                fb += $",\"canvas\": {{\"background\":\"{((timeout > 0) ? this?.Settings?.EditColour : ((timeout == -2) ? this?.Settings?.OkColour : ((timeout <= -3) ? this?.Settings?.ErrorColour : "")))}\"}}";
             fb += "}";
             await Connection.SetFeedbackAsync(JObject.Parse(fb));
         }
 
         private ERole GetTargetRole (Process proc)
         {
-            if (Settings.CommunicationApps.Contains(proc.ProcessName.ToLower()))
+            if (Settings.CommunicationApps.Contains(proc?.ProcessName?.ToLower()))
             {
                 return ERole.eCommunications;
             }
@@ -272,11 +279,11 @@ namespace com.ceridwen.audio
             lastProc = proc;
             if (eRole == ERole.eCommunications)
             {
-                Selected.SelectAudioDevice(eRole);
+                Selected?.SelectAudioDevice(eRole);
             }
             else
             {
-                Selected.SelectAudioDevice(proc);
+                Selected?.SelectAudioDevice(proc);
             }
         }
 
@@ -284,14 +291,14 @@ namespace com.ceridwen.audio
         {
             if (noUpdate) 
             {
-                Selected.RefreshAudioDevice(lastProc); 
+                Selected?.RefreshAudioDevice(lastProc); 
             } else if (lastRole == ERole.eCommunications)
             {
-                Selected.SelectAudioDevice(lastRole);
+                Selected?.SelectAudioDevice(lastRole);
             }
             else
             {
-                Selected.SelectAudioDevice(lastProc);
+                Selected?.SelectAudioDevice(lastProc);
             }
         }
 
@@ -301,7 +308,7 @@ namespace com.ceridwen.audio
         }
         private async Task SetTriggerDescriptionAsync(string rotate, string push, string touch, string longTouch)
         {
-            await Connection.StreamDeckConnection.SendAsync(new SetTriggerDescriptionMessage(rotate, push, touch, longTouch, Connection.ContextId));
+            await Connection.StreamDeckConnection.SendAsync(new SetTriggerDescriptionMessage(rotate, push, touch, longTouch, Connection?.ContextId));
         }
 
         private Task SaveSettings()

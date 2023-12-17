@@ -35,7 +35,7 @@
   "Description": "StreamDeck+ plugin for changing the default audio device of the foreground application under Windows 10 and later.",
   "Icon": "icons/audio",
   "URL": "https://www.ceridwen.com/streamdeck-plugins/",
-  "Version": "1.0.5",
+  "Version": "1.1.0",
   "CodePath": "com.ceridwen.audio",
   "Category": "Ceridwen Audio Tools",
   "CategoryIcon": "icons/ceridwen_mono",

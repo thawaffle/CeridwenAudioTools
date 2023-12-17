@@ -15,13 +15,13 @@ namespace com.ceridwen.audio
     {
         #region Public Members
 
-        public IAudioDevice Selected { get { if (_selected == null) return GetDeviceManager().GetDefaultDevice(ERole.eMultimedia); else return _selected; } }
+        public IAudioDevice Selected { get { if (_selected == null) return GetDeviceManager()?.GetDefaultDevice(ERole.eMultimedia); else return _selected; } }
         public bool IsConfigurable { get { return (_process != null); }}
         public AudioDeviceKind SelectedDeviceKind { get { return _kind;  } set { _kind = value;
-                _deviceSorted = new EncapsulatedSortedList<String, IAudioDevice>(GetDeviceManager().Devices, ad => ad.DisplayName, new AudioDeviceNameComparer());
-                _deviceMap = new EncapsulatedConcurrentDictionary<String, IAudioDevice>(GetDeviceManager().Devices, o => o.Id);
-                _sessionPidMap = new EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>(GetDeviceManager().GetDefaultDevice().Groups, o => o.ProcessId); 
-                _sessionNameMap = new EncapsulatedConcurrentDictionary<String, IAudioDeviceSession>(GetDeviceManager().GetDefaultDevice().Groups, o => o.ExeName);
+                _deviceNameSorted = new EncapsulatedSortedList<string, IAudioDevice>(GetDeviceManager()?.Devices, ad => ad?.DisplayName, new AudioDeviceNameComparer());
+                _deviceIdMap = new EncapsulatedConcurrentDictionary<string, IAudioDevice>(GetDeviceManager()?.Devices, o => o?.Id);
+                _sessionPidMap = new EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>(GetDeviceManager()?.GetDefaultDevice()?.Groups, o => o.ProcessId); 
+                _sessionNameMap = new EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>(GetDeviceManager()?.GetDefaultDevice()?.Groups, o => o?.ExeName);
             } }
         public string SelectedDeviceName { get { return Selected.DisplayName; } }
 
@@ -31,8 +31,8 @@ namespace com.ceridwen.audio
         private AudioDeviceKind _kind;
         private IAudioDevice _selected = null;
         private Process _process = null;
-        private EncapsulatedSortedList<String, IAudioDevice> _deviceSorted;
-        private EncapsulatedConcurrentDictionary<string, IAudioDevice> _deviceMap;
+        private EncapsulatedSortedList<string, IAudioDevice> _deviceNameSorted;
+        private EncapsulatedConcurrentDictionary<string, IAudioDevice> _deviceIdMap;
         private EncapsulatedConcurrentDictionary<int, IAudioDeviceSession> _sessionPidMap;
         private EncapsulatedConcurrentDictionary<string, IAudioDeviceSession> _sessionNameMap;
         #endregion
@@ -61,11 +61,11 @@ namespace com.ceridwen.audio
 
         public bool SelectAudioDevice(int offset)
         {
-            int currentIndex = _deviceSorted.IndexOfValue(Selected);
+            int currentIndex = _deviceNameSorted.IndexOfValue(Selected);
             int index = currentIndex + offset;
-            if (index >= _deviceSorted.Count) index = _deviceSorted.Count - 1;
+            if (index >= _deviceNameSorted?.Count) index = _deviceNameSorted.Count - 1;
             if (index < 0) index = 0;
-            SelectAudioDevice(_deviceSorted.ElementAtOrDefault(index));
+            SelectAudioDevice(_deviceNameSorted?.ElementAtOrDefault(index));
             return (index != currentIndex);
         }
 
@@ -113,8 +113,8 @@ namespace com.ceridwen.audio
 
             for (int i = 0; i < eRoles.Length; i++)
             {
-                devmgr.SetDefaultDevice(Selected, eRoles[i]);
-                result &= devmgr.GetDefaultDevice(eRoles[i])?.Id == Selected?.Id;
+                devmgr?.SetDefaultDevice(Selected, eRoles[i]);
+                result &= devmgr?.GetDefaultDevice(eRoles[i])?.Id == Selected?.Id;
             }
             return result;
         }
@@ -128,7 +128,7 @@ namespace com.ceridwen.audio
         public void SetDefaultAudioDevice(int pid)
         {
             AudioDeviceManager devmgr = GetDeviceManager();
-            devmgr.SetDefaultEndPoint(Selected?.Id, pid);
+            devmgr?.SetDefaultEndPoint(Selected?.Id, pid);
         }
 
         #endregion
@@ -156,25 +156,33 @@ namespace com.ceridwen.audio
             {
                 session = s;
                 return true;
-            } else
+            } 
+            else
             {
-                session = null;
-                return _sessionNameMap.TryFind(focused.ProcessName, out _);
+                // This is a workaround for discord
+                return _sessionNameMap.TryFind(focused?.ProcessName, out session);
             }
         }
 
         private IAudioDevice GetDefaultAudioDevice(Process focused, out Process remap)
         {
-            AudioDeviceManager devmgr = GetDeviceManager();
-            string devId = devmgr.GetDefaultEndPoint(focused.Id);
             remap = focused;
+            
+            if (focused == null) 
+            {
+                return null; 
+            }
+
+            AudioDeviceManager devmgr = GetDeviceManager();
+            string devId = devmgr?.GetDefaultEndPoint(focused.Id);
+
 
             if (devId != "")
                 return GetDeviceFromId(devId);
             else if (IsProcessConfigurable(focused, out IAudioDeviceSession session))
             {
                 if (session != null) remap = Process.GetProcessById(session.ProcessId);
-                return (AudioDevice)devmgr.GetDefaultDevice();
+                return (AudioDevice)devmgr?.GetDefaultDevice();
             }
             else
                 return null;
@@ -182,7 +190,7 @@ namespace com.ceridwen.audio
 
         private IAudioDevice GetDeviceFromId(string devId)
         {
-            if (_deviceMap.TryFind(devId, out IAudioDevice device))
+            if (_deviceIdMap.TryFind(devId, out IAudioDevice device))
             {
                 return device;
             } else
@@ -192,18 +200,36 @@ namespace com.ceridwen.audio
         }
 
         private IList<Process> GetChildProcesses(Process process)
-         => new ManagementObjectSearcher(
+        {
+            if (process != null)
+            {
+                return new ManagementObjectSearcher(
                  $"Select * From Win32_Process Where ParentProcessID={process.Id}")
              .Get()
              .Cast<ManagementObject>()
-             .Select(mo => {
+             .Select(mo =>
+             {
                  try
                  { return Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])); }
                  catch (Exception) { return process; }
              })
              .ToList();
+            }
+            else
+            {
+                return new List<Process>();
+            }
+        }
+
 
         private IAudioDevice ScanForDefaultAudioDevice(Process focused, out Process process)
+        {
+            var candidate = ScanForDefaultAudioDeviceInternal(focused, out process);
+            // This is a workaround for Steam
+            return candidate ?? ScanForDefaultAudioDeviceInternal(WinProcessAPI.GetParentProcess(focused), out process);
+        }
+
+        private IAudioDevice ScanForDefaultAudioDeviceInternal(Process focused, out Process process)
         {
             IAudioDevice device = GetDefaultAudioDevice(focused, out process);
             if (device != null)

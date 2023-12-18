@@ -1,10 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 
 namespace com.ceridwen.audio
 { 
@@ -65,6 +64,28 @@ namespace com.ceridwen.audio
             {
             }
             return null;
+        }
+
+        public static IList<Process> GetChildProcesses(Process process)
+        {
+            if (process != null)
+            {
+                return new ManagementObjectSearcher(
+                 $"Select * From Win32_Process Where ParentProcessID={process.Id}")
+             .Get()
+             .Cast<ManagementObject>()
+             .Select(mo =>
+             {
+                 try
+                 { return Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])); }
+                 catch (Exception) { return process; }
+             })
+             .ToList();
+            }
+            else
+            {
+                return new List<Process>();
+            }
         }
 
         #endregion

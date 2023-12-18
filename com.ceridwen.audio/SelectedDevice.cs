@@ -1,9 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Management;
+﻿using System.Diagnostics;
 using EarTrumpet.DataModel.Audio;
 using EarTrumpet.DataModel.WindowsAudio;
 using EarTrumpet.DataModel.WindowsAudio.Internal;
@@ -199,29 +194,6 @@ namespace com.ceridwen.audio
             }
         }
 
-        private IList<Process> GetChildProcesses(Process process)
-        {
-            if (process != null)
-            {
-                return new ManagementObjectSearcher(
-                 $"Select * From Win32_Process Where ParentProcessID={process.Id}")
-             .Get()
-             .Cast<ManagementObject>()
-             .Select(mo =>
-             {
-                 try
-                 { return Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])); }
-                 catch (Exception) { return process; }
-             })
-             .ToList();
-            }
-            else
-            {
-                return new List<Process>();
-            }
-        }
-
-
         private IAudioDevice ScanForDefaultAudioDevice(Process focused, out Process process)
         {
             var candidate = ScanForDefaultAudioDeviceInternal(focused, out process);
@@ -238,7 +210,7 @@ namespace com.ceridwen.audio
             }
             else
             {
-                foreach (Process child in GetChildProcesses(focused))
+                foreach (Process child in WinProcessAPI.GetChildProcesses(focused))
                 {
                     device = GetDefaultAudioDevice(child, out process);
                     if (device != null)

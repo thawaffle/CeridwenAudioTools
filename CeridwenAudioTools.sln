@@ -5,6 +5,13 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.ceridwen.audio", "com.ceridwen.audio\com.ceridwen.audio.csproj", "{4635D874-69C0-4010-BE46-77EF92EB1553}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32293F9E-E7D3-49CB-9793-5561B6349AC6}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+		CHANGELOG.md = CHANGELOG.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Startup|Any CPU = Debug Startup|Any CPU

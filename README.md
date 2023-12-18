@@ -16,3 +16,4 @@ StreamDeck+ plugin for changing the default audio device of the foreground appli
 ### Acknowledgements
 - [BarRaider’s Stream Deck Tools](https://github.com/BarRaider/streamdeck-tools)
 - [EarTrumpet](https://github.com/File-New-Project/EarTrumpet)
+- [FocusVolumeControl](https://github.com/dlprows/FocusVolumeControl)

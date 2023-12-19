@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using EarTrumpet.DataModel.Audio;
 using EarTrumpet.DataModel.WindowsAudio;
 using EarTrumpet.DataModel.WindowsAudio.Internal;
@@ -10,26 +12,33 @@ namespace com.ceridwen.audio
     {
         #region Public Members
 
-        public IAudioDevice Selected { get { if (_selected == null) return GetDeviceManager()?.GetDefaultDevice(ERole.eMultimedia); else return _selected; } }
         public bool IsConfigurable { get { return (_process != null); }}
-        public AudioDeviceKind SelectedDeviceKind { get { return _kind;  } set { _kind = value;
-                _deviceNameSorted = new EncapsulatedSortedList<string, IAudioDevice>(GetDeviceManager()?.Devices, ad => ad?.DisplayName, new AudioDeviceNameComparer());
-                _deviceIdMap = new EncapsulatedConcurrentDictionary<string, IAudioDevice>(GetDeviceManager()?.Devices, o => o?.Id);
-                _sessionPidMap = new EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>(GetDeviceManager()?.GetDefaultDevice()?.Groups, o => o.ProcessId); 
-                _sessionNameMap = new EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>(GetDeviceManager()?.GetDefaultDevice()?.Groups, o => o?.ExeName);
-            } }
-        public string SelectedDeviceName { get { return Selected.DisplayName; } }
+        public AudioDeviceKind SelectedDeviceKind { get; set; } 
+        public string SelectedDeviceName { get 
+            {
+                try
+                {
+                    return Selected.DisplayName;
+                } catch (Exception)
+                {
+                    return "";
+                }
+            } 
+        }
 
         #endregion
 
         #region Private Members
-        private AudioDeviceKind _kind;
+
+        private IAudioDevice Selected { get { if (_selected == null) return GetDeviceManager()?.GetDefaultDevice(ERole.eMultimedia); else return _selected; } }
         private IAudioDevice _selected = null;
         private Process _process = null;
-        private EncapsulatedSortedList<string, IAudioDevice> _deviceNameSorted;
-        private EncapsulatedConcurrentDictionary<string, IAudioDevice> _deviceIdMap;
-        private EncapsulatedConcurrentDictionary<int, IAudioDeviceSession> _sessionPidMap;
-        private EncapsulatedConcurrentDictionary<string, IAudioDeviceSession> _sessionNameMap;
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, IAudioDevice>> _deviceNameSorted { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, IAudioDevice>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDevice>> _deviceIdMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDevice>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>> _sessionPidMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>> _sessionNameMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>>();
+        private int DeviceNameIndexCount { get { return (int)_deviceNameSorted?[SelectedDeviceKind]?.Count; } }
+
         #endregion
 
         #region Constructors/Detructors
@@ -37,6 +46,14 @@ namespace com.ceridwen.audio
         public SelectedDevice(AudioDeviceKind kind = AudioDeviceKind.Playback)
         {
             SelectedDeviceKind = kind;
+
+            foreach (AudioDeviceKind k in Enum.GetValues(typeof(AudioDeviceKind)))
+            {
+                _deviceNameSorted.TryAdd(k, new EncapsulatedSortedList<string, IAudioDevice>(GetDeviceManager(k)?.Devices, ad => ad?.DisplayName, new AudioDeviceNameComparer()));
+                _deviceIdMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, IAudioDevice>(GetDeviceManager(k)?.Devices, o => o?.Id));
+                _sessionPidMap.TryAdd(k, new EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => o.ProcessId));
+                _sessionNameMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => o?.ExeName));
+            }
         }
 
         #endregion
@@ -45,85 +62,98 @@ namespace com.ceridwen.audio
 
         public void SelectAudioDevice(ERole eRole = ERole.eMultimedia)
         {
-            SelectAudioDevice(GetDeviceManager().GetDefaultDevice(eRole));
             _process = null;
-        }
-
-        public void SelectAudioDevice(IAudioDevice device)
-        {
-            _selected = device;
-        }
-
-        public bool SelectAudioDevice(int offset)
-        {
-            int currentIndex = _deviceNameSorted.IndexOfValue(Selected);
-            int index = currentIndex + offset;
-            if (index >= _deviceNameSorted?.Count) index = _deviceNameSorted.Count - 1;
-            if (index < 0) index = 0;
-            SelectAudioDevice(_deviceNameSorted?.ElementAtOrDefault(index));
-            return (index != currentIndex);
-        }
-
-        public void SelectAudioDevice(Process focused)
-        {
-            IAudioDevice device = ScanForDefaultAudioDevice(focused, out Process process);
-            SelectAudioDevice(device, process);
-        }
-
-        public void RefreshAudioDevice(Process focused)
-        {
-            if (!IsConfigurable)
+            try
             {
-                ScanForDefaultAudioDevice(focused, out _process);
+                SelectAudioDevice(GetDeviceManager().GetDefaultDevice(eRole));
+            } 
+            catch (Exception) 
+            { 
             }
         }
-
-        public void SetSystemAudioDevice()
+       
+        public bool SelectAudioDevice(int offset)
         {
-            SetDefaultAudioDevice(new[]{ ERole.eMultimedia, ERole.eConsole});
-        }
-
-        public bool SetDefaultAudioDevice()
-        {
-            if (_process != null)
+            try
             {
-                IAudioDevice target = Selected;
-                SetDefaultAudioDevice(_process);
-                return (Selected?.Id == target?.Id);
-            } else
+                int currentIndex = GetDeviceNameIndex(Selected);
+                int index = currentIndex + offset;
+                if (index >= DeviceNameIndexCount) index = DeviceNameIndexCount - 1;
+                if (index < 0) index = 0;
+                SelectAudioDevice(GetDeviceAtNameIndex(index));
+                return (index != currentIndex);
+            } 
+            catch (Exception)
             {
                 return false;
             }
         }
 
+        public void SelectAudioDevice(Process focused)
+        {
+            try
+            {
+                IAudioDevice device = ScanForDefaultAudioDevice(focused, out Process process);
+                SelectAudioDevice(device, process);
+            } 
+            catch (Exception)
+            {
+            }
+        }
+
+        public void RefreshAudioDevice(Process focused)
+        {
+            try
+            {
+                if (!IsConfigurable)
+                {
+                    ScanForDefaultAudioDevice(focused, out _process);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void SetSystemAudioDevice()
+        {
+            try
+            {
+                SetDefaultAudioDevice(new[] { ERole.eMultimedia, ERole.eConsole });
+            }
+            catch (Exception)
+            {
+            }
+
+        }
+
+        public bool SetDefaultAudioDevice()
+        {
+            try
+            {
+                if (_process != null)
+                {
+                    IAudioDevice target = Selected;
+                    SetDefaultAudioDevice(_process);
+                    return (Selected?.Id == target?.Id);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
         public bool SetDefaultAudioDevice(ERole eRole)
         {
-            return SetDefaultAudioDevice(new[] { eRole });
-        }
-
-        public bool SetDefaultAudioDevice(ERole[] eRoles)
-        {
-            bool result = true;
-            AudioDeviceManager devmgr = GetDeviceManager();
-
-            for (int i = 0; i < eRoles.Length; i++)
+            try
             {
-                devmgr?.SetDefaultDevice(Selected, eRoles[i]);
-                result &= devmgr?.GetDefaultDevice(eRoles[i])?.Id == Selected?.Id;
+                return SetDefaultAudioDevice(new[] { eRole });
+            } 
+            catch (Exception)
+            {
+                return false;
             }
-            return result;
-        }
-
-        public void SetDefaultAudioDevice(Process focused)
-        {
-            SetDefaultAudioDevice(focused.Id);
-            SelectAudioDevice(focused);
-        }
-
-        public void SetDefaultAudioDevice(int pid)
-        {
-            AudioDeviceManager devmgr = GetDeviceManager();
-            devmgr?.SetDefaultEndPoint(Selected?.Id, pid);
         }
 
         #endregion
@@ -138,6 +168,10 @@ namespace com.ceridwen.audio
         {
             return (AudioDeviceManager)WindowsAudioFactory.Create(kind);
         }
+        private void SelectAudioDevice(IAudioDevice device)
+        {
+            _selected = device;
+        }
 
         private void SelectAudioDevice(IAudioDevice device, Process process)
         {
@@ -145,18 +179,20 @@ namespace com.ceridwen.audio
             SelectAudioDevice(device);
         }
 
+        private bool FindSessionByPID(int pid, out IAudioDeviceSession session)
+        {
+            session = null;
+            return _sessionPidMap?[SelectedDeviceKind] != null ? _sessionPidMap[SelectedDeviceKind].TryFind(pid, out session) : false;
+        }
+
+        private bool FindSessionByName(string name, out IAudioDeviceSession session)
+        {
+            session = null;
+            return _sessionNameMap?[SelectedDeviceKind] != null ? _sessionNameMap[SelectedDeviceKind].TryFind(name, out session) : false;
+        }
         private bool IsProcessConfigurable(Process focused, out IAudioDeviceSession session)
         {
-            if (_sessionPidMap.TryFind(focused.Id, out var s))
-            {
-                session = s;
-                return true;
-            } 
-            else
-            {
-                // This is a workaround for discord
-                return _sessionNameMap.TryFind(focused?.ProcessName, out session);
-            }
+            return FindSessionByPID(focused.Id, out session) ? true : /* This is a workaround for discord: */ FindSessionByName(focused?.ProcessName, out session);
         }
 
         private IAudioDevice GetDefaultAudioDevice(Process focused, out Process remap)
@@ -183,15 +219,26 @@ namespace com.ceridwen.audio
                 return null;
         }
 
+        private int GetDeviceNameIndex(IAudioDevice device)
+        {
+            return _deviceNameSorted?[SelectedDeviceKind] != null ? _deviceNameSorted[SelectedDeviceKind].IndexOfValue(device) : 0;
+        }
+
+        private IAudioDevice GetDeviceAtNameIndex(int index)
+        {
+            return _deviceNameSorted?[SelectedDeviceKind]?.ElementAtOrDefault(index);
+        }
+
+        IAudioDevice GetAudioDeviceById(string id)
+        {
+            IAudioDevice device = null;
+            _deviceIdMap?[SelectedDeviceKind]?.TryFind(id, out device);
+            return device;
+
+        } 
         private IAudioDevice GetDeviceFromId(string devId)
         {
-            if (_deviceIdMap.TryFind(devId, out IAudioDevice device))
-            {
-                return device;
-            } else
-            {
-                return null;
-            }
+            return GetAudioDeviceById(devId);
         }
 
         private IAudioDevice ScanForDefaultAudioDevice(Process focused, out Process process)
@@ -222,6 +269,32 @@ namespace com.ceridwen.audio
                 return null;
             }
         }
+
+        private bool SetDefaultAudioDevice(ERole[] eRoles)
+        {
+            bool result = true;
+            AudioDeviceManager devmgr = GetDeviceManager();
+
+            for (int i = 0; i < eRoles.Length; i++)
+            {
+                devmgr?.SetDefaultDevice(Selected, eRoles[i]);
+                result &= devmgr?.GetDefaultDevice(eRoles[i])?.Id == Selected?.Id;
+            }
+            return result;
+        }
+
+        private void SetDefaultAudioDevice(Process focused)
+        {
+            SetDefaultAudioDevice(focused.Id);
+            SelectAudioDevice(focused);
+        }
+
+        private void SetDefaultAudioDevice(int pid)
+        {
+            AudioDeviceManager devmgr = GetDeviceManager();
+            devmgr?.SetDefaultEndPoint(Selected?.Id, pid);
+        }
+
 
         #endregion
     }

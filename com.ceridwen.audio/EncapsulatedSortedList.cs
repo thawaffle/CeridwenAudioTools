@@ -5,11 +5,11 @@ using System.Collections.ObjectModel;
 
 namespace com.ceridwen.audio
 {
-    public class EncapsulatedSortedList<K, O> : EncapsulatedDictionary<K, O, SortedList<K, O>> 
+    public class EncapsulatedSortedList<K, I, O> : EncapsulatedDictionary<K, I, O, SortedList<K, O>> 
     {
         #region Constructors/Destructors
 
-        public EncapsulatedSortedList(ObservableCollection<O> collection, Func<O, K> keySelector, IComparer<K> comparer) : base(collection, keySelector, new SortedList<K, O>(comparer))
+        public EncapsulatedSortedList(ObservableCollection<O> collection, Func<O, K> keySelector, Func<O, I> uidSelector, IComparer<K> comparer) : base(collection, keySelector, uidSelector, new SortedList<K, O>(comparer))
         {
 
         }

@@ -33,10 +33,10 @@ namespace com.ceridwen.audio
         private IAudioDevice Selected { get { if (_selected == null) return GetDeviceManager()?.GetDefaultDevice(ERole.eMultimedia); else return _selected; } }
         private IAudioDevice _selected = null;
         private Process _process = null;
-        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, IAudioDevice>> _deviceNameSorted { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, IAudioDevice>>();
-        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDevice>> _deviceIdMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDevice>>();
-        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>> _sessionPidMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>>();
-        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>> _sessionNameMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, string, IAudioDevice>> _deviceNameSorted { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedSortedList<string, string, IAudioDevice>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, string, IAudioDevice>> _deviceIdMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, string, IAudioDevice>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, string, IAudioDeviceSession>> _sessionPidMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<int, string, IAudioDeviceSession>>();
+        private ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, string, IAudioDeviceSession>> _sessionNameMap { get; } = new ConcurrentDictionary<AudioDeviceKind, EncapsulatedConcurrentDictionary<string, string, IAudioDeviceSession>>();
         private int DeviceNameIndexCount { get { return (int)_deviceNameSorted?[SelectedDeviceKind]?.Count; } }
 
         #endregion
@@ -49,10 +49,10 @@ namespace com.ceridwen.audio
 
             foreach (AudioDeviceKind k in Enum.GetValues(typeof(AudioDeviceKind)))
             {
-                _deviceNameSorted.TryAdd(k, new EncapsulatedSortedList<string, IAudioDevice>(GetDeviceManager(k)?.Devices, ad => ad?.DisplayName, new AudioDeviceNameComparer()));
-                _deviceIdMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, IAudioDevice>(GetDeviceManager(k)?.Devices, o => o?.Id));
-                _sessionPidMap.TryAdd(k, new EncapsulatedConcurrentDictionary<int, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => o.ProcessId));
-                _sessionNameMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => o?.ExeName));
+                _deviceNameSorted.TryAdd(k, new EncapsulatedSortedList<string, string, IAudioDevice>(GetDeviceManager(k)?.Devices, ad => ad?.DisplayName, ad => ad?.Id, new AudioDeviceNameComparer()));
+                _deviceIdMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, string, IAudioDevice>(GetDeviceManager(k)?.Devices, o => o?.Id, o=>o?.Id));
+                _sessionPidMap.TryAdd(k, new EncapsulatedConcurrentDictionary<int, string, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => (int)o?.ProcessId, o => o?.Id));
+                _sessionNameMap.TryAdd(k, new EncapsulatedConcurrentDictionary<string, string, IAudioDeviceSession>(GetDeviceManager(k)?.GetDefaultDevice()?.Groups, o => o?.ExeName, o => o?.Id));
             }
         }
 

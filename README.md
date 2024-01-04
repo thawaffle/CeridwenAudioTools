@@ -11,7 +11,7 @@ StreamDeck+ plugin for changing the default audio device of the foreground appli
 
 ### Known Issues
 - Application is only configurable if it has opened an audio device (e.g. has played a sound. This is a “feature” of Windows.
-- Only works if the application uses the default Windows devices. Some applications link directly to devices without the option of choosing the System Default device (e.g. MS Teams).
+- Only works if the application uses the default Windows devices. Some applications link directly to devices without the option of choosing the System Default device (e.g. some versions of MS Teams).
 
 ### Acknowledgements
 - [BarRaider’s Stream Deck Tools](https://github.com/BarRaider/streamdeck-tools)
